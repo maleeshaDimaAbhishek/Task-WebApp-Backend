@@ -12,4 +12,8 @@ public interface CategoryService {
     @Nullable CategoryDTO getCategoryById(Long id);
 
     @Nullable CategoryDTO createCategory(@Valid CategoryDTO categoryDTO);
+
+    @Nullable CategoryDTO updateCategory(Long id, @Valid CategoryDTO categoryDTO);
+
+    void deleteCategory(Long id);
 }
