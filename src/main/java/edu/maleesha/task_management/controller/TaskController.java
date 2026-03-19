@@ -30,4 +30,5 @@ public class TaskController {
         TaskResponseDTO createdTask = taskService.createTask(taskRequestDTO);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED); // Returns 201 Created
     }
+
 }
