@@ -1,5 +1,6 @@
 package edu.maleesha.task_management.service.impl;
 
+import edu.maleesha.task_management.exception.ResourceNotFoundException;
 import edu.maleesha.task_management.model.DTO.CategoryDTO;
 import edu.maleesha.task_management.model.entity.Category;
 import edu.maleesha.task_management.repository.CategoryRepository;
@@ -22,5 +23,19 @@ public class CategoryServiceImpl implements CategoryService {
         return categories.stream()
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .toList();
+    }
+
+    @Override
+    public CategoryDTO getCategoryById(Long id) {
+        Category category= categoryRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found"));
+        return modelMapper.map(category, CategoryDTO.class);
+    }
+
+    @Override
+    public CategoryDTO createCategory(CategoryDTO categoryDTO) {
+        Category  category = modelMapper.map(categoryDTO, Category.class);
+
+        return modelMapper.map(categoryRepository.save(category), CategoryDTO.class);
     }
 }

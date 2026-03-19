@@ -2,12 +2,10 @@ package edu.maleesha.task_management.controller;
 
 import edu.maleesha.task_management.model.DTO.CategoryDTO;
 import edu.maleesha.task_management.service.CategoryService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -17,9 +15,18 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CategoryController {
     private final CategoryService categoryService;
-     @GetMapping
+
+    @GetMapping
     public ResponseEntity<List<CategoryDTO>> getAllCategories() {
          return ResponseEntity.ok(categoryService.getAllCategories());
      }
 
+    @GetMapping
+    public ResponseEntity<CategoryDTO> getCategoryById(@PathVariable Long id) {
+        return ResponseEntity.ok(categoryService.getCategoryById(id));
+    }
+    @PostMapping
+    public ResponseEntity<CategoryDTO> createCategory(@Valid @RequestBody CategoryDTO categoryDTO) {
+        return ResponseEntity.ok(categoryService.createCategory(categoryDTO));
+    }
 }
