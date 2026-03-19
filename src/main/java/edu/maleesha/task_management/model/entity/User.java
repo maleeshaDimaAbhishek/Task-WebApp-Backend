@@ -32,6 +32,8 @@ public class User {
     @NotBlank(message = "Email is Required")
     @Column(unique = true, nullable = false)
     private String email;
+    @Column(nullable = false)
+    private String status;
     @NotBlank(message = "Password is Required")
     @Size(min = 8,message = "Password must be at least 8 characters")
     @Column(nullable = false)
