@@ -30,7 +30,7 @@ public class Task {
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     @CreationTimestamp
-    @Column(updatable = false)
+    @Column(name = "created", updatable = false)
     private LocalDateTime created;
 
     @ManyToOne(fetch = FetchType.LAZY)
