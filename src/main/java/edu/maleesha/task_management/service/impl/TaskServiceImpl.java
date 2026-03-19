@@ -26,7 +26,7 @@ public class TaskServiceImpl implements TaskService {
     public List<TaskResponseDTO> getAllTask() {
         List<Task> tasks=taskRepository.findAll();
         return tasks.stream()
-                .map(task -> modelMapper.map(tasks, TaskResponseDTO.class))
+                .map(task -> modelMapper.map(task, TaskResponseDTO.class))
                 .toList();
     }
 
