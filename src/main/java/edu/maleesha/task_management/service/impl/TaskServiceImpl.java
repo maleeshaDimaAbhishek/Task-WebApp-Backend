@@ -23,13 +23,18 @@ public class TaskServiceImpl implements TaskService {
     private final ModelMapper modelMapper;
     private final CategoryRepository categoryRepository;
     @Override
-    public @Nullable List<TaskResponseDTO> getAllTask() {
-        return List.of();
+    public List<TaskResponseDTO> getAllTask() {
+        List<Task> tasks=taskRepository.findAll();
+        return tasks.stream()
+                .map(task -> modelMapper.map(tasks, TaskResponseDTO.class))
+                .toList();
     }
 
     @Override
-    public @Nullable TaskResponseDTO getTaskById(String id) {
-        return null;
+    public TaskResponseDTO getTaskById(Long id) {
+        Task task=taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found"));
+        return modelMapper.map(task, TaskResponseDTO.class);
     }
 
     @Override
@@ -51,4 +56,30 @@ public class TaskServiceImpl implements TaskService {
         //Map to ResponseDTO
         return modelMapper.map(savedTask,TaskResponseDTO.class);
     }
+
+    @Override
+    public @Nullable TaskResponseDTO updateTask(Long id, TaskRequestDTO taskRequestDTO) {
+        //Check Task Exists
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with ID: " + id));
+        if(taskRequestDTO.getTitle()!=null) {
+            taskRequestDTO.setTitle(taskRequestDTO.getTitle());
+        }
+        if (taskRequestDTO.getDescription()!=null) {
+            taskRequestDTO.setDescription(taskRequestDTO.getDescription());
+        }
+        Category category=categoryRepository.findById(taskRequestDTO.getCategoryId())
+                .orElseThrow(() -> new ResourceNotFoundException("Category not found with ID: " + taskRequestDTO.getCategoryId()));
+        task.setCategory(category);
+        //Update task
+        return modelMapper.map(taskRepository.save(task), TaskResponseDTO.class);
+    }
+
+    @Override
+    public void deleteTask(Long id) {
+        Task task = taskRepository.findById(id)
+                .orElseThrow(() -> new ResourceNotFoundException("Task not found with ID: " + id));
+        taskRepository.delete(task);
+    }
+
 }

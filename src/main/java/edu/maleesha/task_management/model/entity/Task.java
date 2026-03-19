@@ -27,6 +27,7 @@ public class Task {
     @NotBlank(message = "Description is required")
     @Column(nullable = false)
     private String description;
+    @NotBlank(message = "Status is Required")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     @CreationTimestamp

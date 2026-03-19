@@ -10,7 +10,11 @@ import java.util.List;
 public interface TaskService {
     @Nullable List<TaskResponseDTO> getAllTask();
 
-    @Nullable TaskResponseDTO getTaskById(String id);
+    TaskResponseDTO getTaskById(Long id);
 
     TaskResponseDTO createTask(@Valid TaskRequestDTO taskRequestDTO);
+
+    @Nullable TaskResponseDTO updateTask(Long id, @Valid TaskRequestDTO taskRequestDTO);
+
+    void deleteTask(Long id);
 }

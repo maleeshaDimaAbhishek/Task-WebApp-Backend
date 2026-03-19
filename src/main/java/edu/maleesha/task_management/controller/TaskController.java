@@ -22,7 +22,7 @@ public class TaskController {
         return ResponseEntity.ok(taskService.getAllTask());
     }
     @GetMapping("/{id}")
-    public ResponseEntity<TaskResponseDTO> getTask(@PathVariable String id) {
+    public ResponseEntity<TaskResponseDTO> getTask(@PathVariable Long id) {
         return ResponseEntity.ok(taskService.getTaskById(id));
     }
     @PostMapping
@@ -30,5 +30,15 @@ public class TaskController {
         TaskResponseDTO createdTask = taskService.createTask(taskRequestDTO);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED); // Returns 201 Created
     }
-
+    @PutMapping("/{id}")
+    public ResponseEntity<TaskResponseDTO> updateTask(
+            @PathVariable Long id,
+            @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
+            return ResponseEntity.ok(taskService.updateTask(id,taskRequestDTO));
+    }
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
+        taskService.deleteTask(id);
+        return ResponseEntity.noContent().build();
+    }
 }
