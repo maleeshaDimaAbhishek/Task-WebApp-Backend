@@ -1,6 +1,5 @@
-package edu.maleesha.task_management.utill;
+package edu.maleesha.task_management.security;
 
-import edu.maleesha.task_management.model.DTO.UserRequestDTO;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
