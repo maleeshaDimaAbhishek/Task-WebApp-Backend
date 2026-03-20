@@ -1,5 +1,6 @@
 package edu.maleesha.task_management.controller;
 
+import edu.maleesha.task_management.model.DTO.LoginRequestDTO;
 import edu.maleesha.task_management.model.DTO.UserRequestDTO;
 import edu.maleesha.task_management.model.DTO.UserResponseDTO;
 import edu.maleesha.task_management.service.UserService;
@@ -20,5 +21,10 @@ public class UserController {
     public ResponseEntity<UserResponseDTO>registerUser(@Valid @RequestBody UserRequestDTO userRequestDTO) {
         UserResponseDTO createUser=userService.createUser(userRequestDTO);
         return new ResponseEntity<>(createUser, HttpStatus.CREATED);
+    }
+    @PostMapping("/login")
+    public ResponseEntity<UserResponseDTO>login(@Valid @RequestBody LoginRequestDTO loginRequestDTO) {
+        UserResponseDTO userResponseDTO=userService.login(loginRequestDTO);
+        return ResponseEntity.ok(userResponseDTO);
     }
 }
