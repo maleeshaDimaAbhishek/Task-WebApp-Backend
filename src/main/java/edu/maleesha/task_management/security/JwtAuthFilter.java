@@ -23,21 +23,46 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                                     HttpServletResponse response,
                                     FilterChain filterChain)
             throws ServletException, IOException {
-        final String authorizationHeader = request.getHeader("Authorization");
-        if(authorizationHeader != null || authorizationHeader.startsWith("Bearer ")) {
-            filterChain.doFilter(request,response);
+
+        String path = request.getRequestURI();
+
+        // ✅ Skip Swagger & auth endpoints
+        if (path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/auth")) {
+
+            filterChain.doFilter(request, response);
             return;
         }
-        String token = authorizationHeader.substring(7);
-        String username = jwtUtil.extractUsername(token);
 
-        //authentication
-        if(username!=null && SecurityContextHolder.getContext().getAuthentication()==null) {
-            if(jwtUtil.isTokenValid(token,username)){
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(username, null, Collections.emptyList());
+        final String authorizationHeader = request.getHeader("Authorization");
+
+        String username = null;
+        String token = null;
+
+        // ✅ Correct condition (use AND)
+        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
+            token = authorizationHeader.substring(7);
+            username = jwtUtil.extractUsername(token);
+        }
+
+        // ✅ Authenticate only if token is valid
+        if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+
+            if (jwtUtil.isTokenValid(token, username)) {
+
+                UsernamePasswordAuthenticationToken authentication =
+                        new UsernamePasswordAuthenticationToken(
+                                username,
+                                null,
+                                Collections.emptyList()
+                        );
+
                 SecurityContextHolder.getContext().setAuthentication(authentication);
             }
         }
-        filterChain.doFilter(request,response);
+
+        // ✅ Call filter chain ONLY ONCE
+        filterChain.doFilter(request, response);
     }
 }
