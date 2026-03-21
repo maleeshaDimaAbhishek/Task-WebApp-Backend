@@ -10,6 +10,8 @@ import java.util.List;
 public interface TaskService {
     @Nullable List<TaskResponseDTO> getAllTask();
 
+    @Nullable List<TaskResponseDTO> getAllTaskForAdmin();
+
     TaskResponseDTO getTaskById(Long id);
 
     TaskResponseDTO createTask(@Valid TaskRequestDTO taskRequestDTO);

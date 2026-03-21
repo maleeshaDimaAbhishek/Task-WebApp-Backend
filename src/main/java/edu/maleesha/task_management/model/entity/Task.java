@@ -3,6 +3,7 @@ package edu.maleesha.task_management.model.entity;
 import edu.maleesha.task_management.model.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +28,7 @@ public class Task {
     @NotBlank(message = "Description is required")
     @Column(nullable = false)
     private String description;
-    @NotBlank(message = "Status is Required")
+    @NotNull(message = "Status is Required")
     @Enumerated(EnumType.STRING)
     private TaskStatus status;
     @CreationTimestamp
@@ -35,7 +36,7 @@ public class Task {
     private LocalDateTime created;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id",nullable = false)
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)

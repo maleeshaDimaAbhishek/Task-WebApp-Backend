@@ -3,6 +3,7 @@ package edu.maleesha.task_management.model.entity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -25,7 +26,7 @@ public class User {
     private String username;
     @Column(nullable = false)
     private String name;
-    @NotBlank(message = "Birth Date is Required")
+    @NotNull
     @Column(nullable = false)
     private LocalDate birthDate;
     @Email(message = "Please provide a valid email")

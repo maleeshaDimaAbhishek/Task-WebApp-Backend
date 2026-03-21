@@ -12,4 +12,5 @@ public class TaskRequestDTO {
     private String description;
     private String status;
     private Long categoryId;
+    private Long userId;
 }

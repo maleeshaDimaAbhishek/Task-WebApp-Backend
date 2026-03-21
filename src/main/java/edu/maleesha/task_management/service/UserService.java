@@ -16,6 +16,8 @@ public interface UserService {
 
     List<UserResponseDTO> getAllUsers();
 
+    @Nullable UserResponseDTO getCurrentUser();
+
     @Nullable UserResponseDTO getUserById(Long id);
 
     @Nullable UserResponseDTO updateUser(Long id, @Valid UserRequestDTO userRequestDTO);

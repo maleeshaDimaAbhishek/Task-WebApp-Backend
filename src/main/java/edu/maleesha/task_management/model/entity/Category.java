@@ -18,4 +18,5 @@ public class Category {
     @NotBlank(message = "Category name is required")
     @Column(unique = true, nullable = false)
     private String name;
+
 }

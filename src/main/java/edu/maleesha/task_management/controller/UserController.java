@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("ai/auth")
+@RequestMapping("api/auth")
 @CrossOrigin(origins = "http://localhost:4200")
 @RequiredArgsConstructor
 public class UserController {
@@ -32,6 +32,10 @@ public class UserController {
     @GetMapping
     public ResponseEntity<List<UserResponseDTO>> getAllUsers() {
         return ResponseEntity.ok(userService.getAllUsers());
+    }
+    @GetMapping("/me")
+    public ResponseEntity<UserResponseDTO> getCurrentUser() {
+        return ResponseEntity.ok(userService.getCurrentUser());
     }
     @GetMapping("/{id}")
     public ResponseEntity<UserResponseDTO> getUserById(@PathVariable Long id) {

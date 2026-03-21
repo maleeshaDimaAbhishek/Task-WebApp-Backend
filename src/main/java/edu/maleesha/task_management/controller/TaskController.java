@@ -3,6 +3,7 @@ package edu.maleesha.task_management.controller;
 import edu.maleesha.task_management.model.DTO.TaskRequestDTO;
 import edu.maleesha.task_management.model.DTO.TaskResponseDTO;
 import edu.maleesha.task_management.service.TaskService;
+import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,6 +21,10 @@ public class TaskController {
     @GetMapping
     public ResponseEntity<List<TaskResponseDTO>> getAllTasks() {
         return ResponseEntity.ok(taskService.getAllTask());
+    }
+    @GetMapping("/admin/all")
+    public ResponseEntity<List<TaskResponseDTO>> getAllTasksForAdmin() {
+        return ResponseEntity.ok(taskService.getAllTaskForAdmin());
     }
     @GetMapping("/{id}")
     public ResponseEntity<TaskResponseDTO> getTask(@PathVariable Long id) {

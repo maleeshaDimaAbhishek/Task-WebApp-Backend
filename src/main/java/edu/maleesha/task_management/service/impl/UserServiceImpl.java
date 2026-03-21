@@ -1,5 +1,6 @@
 package edu.maleesha.task_management.service.impl;
 
+import edu.maleesha.task_management.exception.InvalidCredentialsException;
 import edu.maleesha.task_management.exception.ResourceAlreadyExistsException;
 import edu.maleesha.task_management.exception.ResourceNotFoundException;
 import edu.maleesha.task_management.model.DTO.AuthResponseDTO;
@@ -13,6 +14,8 @@ import edu.maleesha.task_management.security.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -43,10 +46,11 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public AuthResponseDTO login(LoginRequestDTO loginRequestDTO) {
+        System.out.println(passwordEncoder.encode("admin123"));
         User user=userRepository.findByUsername(loginRequestDTO.getUsername())
-                .orElseThrow(()->new RuntimeException("Invalid username"));
+                .orElseThrow(()->new InvalidCredentialsException("Invalid UserName"));
         if(!passwordEncoder.matches(loginRequestDTO.getPassword(),user.getPassword())){
-            throw new RuntimeException("Invalid username or password");
+            throw new InvalidCredentialsException("Invalid credentials");
         }
         String token=jwtUtil.generateToken(user.getUsername());
         return new AuthResponseDTO(token);
@@ -58,6 +62,18 @@ public class UserServiceImpl implements UserService {
                 .stream()
                 .map(user -> modelMapper.map(user, UserResponseDTO.class))
                 .toList();
+    }
+
+    @Override
+    public @Nullable UserResponseDTO getCurrentUser() {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null || authentication.getName() == null || "anonymousUser".equals(authentication.getName())) {
+            throw new InvalidCredentialsException("Unauthorized");
+        }
+
+        User user = userRepository.findByUsername(authentication.getName())
+                .orElseThrow(() -> new ResourceNotFoundException("User not found"));
+        return modelMapper.map(user, UserResponseDTO.class);
     }
 
     @Override
